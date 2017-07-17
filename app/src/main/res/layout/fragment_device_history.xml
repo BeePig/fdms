@@ -25,6 +25,15 @@
             app:floatingSearch_showSearchKey="true"/>
         <ExpandableListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:expandableAdapter="@{viewModel.adapter}"
+            android:layoutDirection="rtl"/>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateDrawable="@drawable/rotate_progressbar"
+            android:visibility="@{viewModel.loadingMoreVisibility}"/>
     </LinearLayout>
 </layout>

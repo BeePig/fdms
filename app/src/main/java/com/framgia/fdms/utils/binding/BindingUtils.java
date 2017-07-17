@@ -29,7 +29,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -590,5 +592,11 @@ public final class BindingUtils {
     @BindingAdapter("tabNumber")
     public static void setTab(ViewPager view, int tab) {
         view.setCurrentItem(tab);
+    }
+
+    @BindingAdapter("expandableAdapter")
+    public static void setExpandableAdapter(ExpandableListView expandableListView,
+                                            BaseExpandableListAdapter baseExpandableListAdapter) {
+        expandableListView.setAdapter(baseExpandableListAdapter);
     }
 }

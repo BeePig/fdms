@@ -25,6 +25,14 @@ public class DeviceUsingHistory extends BaseObservable {
     private Date mEndDate;
     private List<Device> mUsingDevices;
 
+    public DeviceUsingHistory(String staffName, Date startDate, Date endDate, List<Device>
+        usingDevices) {
+        mStaffName = staffName;
+        mStartDate = startDate;
+        mEndDate = endDate;
+        mUsingDevices = usingDevices;
+    }
+
     @Bindable
     public List<Device> getUsingDevices() {
         return mUsingDevices;

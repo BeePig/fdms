@@ -6,8 +6,10 @@ import com.framgia.fdms.data.model.Status;
 import com.framgia.fdms.data.source.api.service.FDMSApi;
 import com.framgia.fdms.data.source.api.service.FDMSServiceClient;
 import com.framgia.fdms.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -15,10 +17,8 @@ import rx.functions.Func1;
  * Created by Hoang Van Nha on 5/23/2017.
  * <></>
  */
-
 public class DeviceReturnRemoteDataSource
-        implements com.framgia.fdms.data.source.DeviceReturnDataSource.RemoteDataSource {
-
+    implements com.framgia.fdms.data.source.DeviceReturnDataSource.RemoteDataSource {
     private static DeviceReturnRemoteDataSource sInstances;
     private FDMSApi mFDMSApi;
 
@@ -47,12 +47,23 @@ public class DeviceReturnRemoteDataSource
     @Override
     public Observable<List<Device>> getDevicesOfBorrower() {
         return mFDMSApi.getDevicesBorrow()
-                .flatMap(new Func1<Respone<List<Device>>, Observable<List<Device>>>() {
+            .flatMap(new Func1<Respone<List<Device>>, Observable<List<Device>>>() {
+                @Override
+                public Observable<List<Device>> call(Respone<List<Device>> listRespone) {
+                    return Utils.getResponse(listRespone);
+                }
+            });
+    }
 
-                    @Override
-                    public Observable<List<Device>> call(Respone<List<Device>> listRespone) {
-                        return Utils.getResponse(listRespone);
-                    }
-                });
+    public Observable<List<Device>> getAssigmentDevices() {
+        List<Device> devices = new ArrayList<>();
+        Device device = new Device();
+        device.setProductionName("Camera");
+        int i = 0;
+        while (i < 10) {
+            devices.add(device);
+            i++;
+        }
+        return Observable.just(devices);
     }
 }

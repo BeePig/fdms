@@ -23,6 +23,6 @@ public class DeviceReturnRepository {
     }
 
     public Observable<List<Device>> devicesOfBorrower() {
-        return mDataSource.getDevicesOfBorrower();
+        return mDataSource.getAssigmentDevices();
     }
 }

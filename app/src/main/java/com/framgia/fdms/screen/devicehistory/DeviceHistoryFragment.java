@@ -24,7 +24,7 @@ public class DeviceHistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = new DeviceHistoryViewModel();
+        mViewModel = new DeviceHistoryViewModel(getActivity());
         DeviceHistoryContract.Presenter presenter =
             new DeviceHistoryPresenter(mViewModel);
         mViewModel.setPresenter(presenter);

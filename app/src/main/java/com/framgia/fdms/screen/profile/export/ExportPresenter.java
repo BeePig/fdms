@@ -4,9 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
+
 import com.framgia.fdms.R;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.User;
+import com.framgia.fdms.screen.export.FileExportContract;
+import com.framgia.fdms.screen.export.FileExportDocumentImpl;
 import com.framgia.fdms.utils.Utils;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Chunk;
@@ -22,6 +25,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -45,21 +50,19 @@ import static com.itextpdf.text.Font.ITALIC;
 /**
  * Created by tuanbg on 6/14/17.
  */
-
 public class ExportPresenter implements ExportContract.Presenter {
     private static final int NUMBER_COLUMN_TABLE = 4;
     private static final int FONT_SIZE = 5;
     private static final String FILE_NAME_SAVED_PDF = ".pdf";
-    private static final String FILE_NAME_SAVED_DOCX = ".docx";
     private static final int VALUE_IMAGE = 100;
     private static final float sTextSize = 20.7f;
     private static final int WIDTH_PERCENTAGE = 100;
     private static final int INDENT_LEFT = 10;
     private static final int HEADER_FONT_SIZE = 16;
     private static final int NORMAL_FONT_SIZE = 13;
-    private static final float[] COLUMN_WIDTH_TABLE_HEADER = { 2, 3, 3 };
-    private static final float[] COLUMN_WIDTH_TABLE_INFO = { 2, 1 };
-    private static final float[] COLUMN_WIDTH_TABLE_DEVICE = { 1, 3, 3, 3 };
+    private static final float[] COLUMN_WIDTH_TABLE_HEADER = {2, 3, 3};
+    private static final float[] COLUMN_WIDTH_TABLE_INFO = {2, 1};
+    private static final float[] COLUMN_WIDTH_TABLE_DEVICE = {1, 3, 3, 3};
     private static final int COLUMN_TABLE_SIGNATURE = 2;
     private static final int COL_SPAN = 2;
     private static final float THINKNESS = 0.7f;
@@ -71,6 +74,7 @@ public class ExportPresenter implements ExportContract.Presenter {
     private static final int INDEX_ISO = 3;
     private static final int INDEX_DELIVER = 0;
     private static final int INDEX_DATE = 5;
+    private static final String FILE_NAME_SAVED_DOCX = ".docx";
     private Image mImage;
     private Paragraph mParagraph;
     private User mUser;
@@ -82,21 +86,19 @@ public class ExportPresenter implements ExportContract.Presenter {
     private PdfPTable mTableSignature;
     private Paragraph mPledge;
     private Paragraph mHeader;
+    private FileExportContract mExportDocument;
 
     public ExportPresenter(User user, ExportContract.ViewModel viewModel) {
         mUser = user;
         mCompositeSubscription = new CompositeSubscription();
-        mViewModel = viewModel;
     }
 
     @Override
     public void onStart() {
-
     }
 
     @Override
     public void onStop() {
-
     }
 
     private Object createPdfAssinment(List<Device> list) {
@@ -120,7 +122,6 @@ public class ExportPresenter implements ExportContract.Presenter {
             getTableDevices(list);
             getPledge();
             getTableSignature();
-
             document.add(mTableHeader);
             document.add(new Paragraph("\n"));
             document.add(mTableInfo);
@@ -218,14 +219,14 @@ public class ExportPresenter implements ExportContract.Presenter {
         mHeader = new Paragraph();
         mHeader.setIndentationLeft(INDENT_LEFT);
         mHeader.add(new Chunk(mViewModel.getString(R.string.title_delivery_device),
-                new Font(TIMES_ROMAN, NORMAL_FONT_SIZE, BOLD)).setUnderline(THINKNESS, Y_POSITION));
+            new Font(TIMES_ROMAN, NORMAL_FONT_SIZE, BOLD)).setUnderline(THINKNESS, Y_POSITION));
     }
 
     private void getPledge() {
         mPledge = new Paragraph();
         mPledge.setIndentationLeft(INDENT_LEFT);
         mPledge.add(new Chunk(mViewModel.getString(R.string.title_report_pledge),
-                new Font(TIMES_ROMAN, NORMAL_FONT_SIZE, ITALIC)));
+            new Font(TIMES_ROMAN, NORMAL_FONT_SIZE, ITALIC)));
     }
 
     private void getTableSignature() {
@@ -233,7 +234,7 @@ public class ExportPresenter implements ExportContract.Presenter {
         mTableSignature.setWidthPercentage(WIDTH_PERCENTAGE);
         Paragraph paraReceiver = new Paragraph();
         paraReceiver.add(new Chunk(mViewModel.getString(R.string.title_receiver),
-                new Font(TIMES_ROMAN, NORMAL_FONT_SIZE, BOLD)));
+            new Font(TIMES_ROMAN, NORMAL_FONT_SIZE, BOLD)));
         paraReceiver.add(new Chunk(mViewModel.getString(R.string.title_sign_name)));
         for (int i = 0; i < TOTAL_LINE_SIGN; i++) {
             paraReceiver.add(new Chunk(Chunk.NEWLINE));
@@ -241,10 +242,9 @@ public class ExportPresenter implements ExportContract.Presenter {
         PdfPCell receiver = new PdfPCell(paraReceiver);
         receiver.setHorizontalAlignment(Element.ALIGN_CENTER);
         mTableSignature.addCell(receiver);
-
         Paragraph paraDeliver = new Paragraph();
         paraDeliver.add(new Chunk(mViewModel.getString(R.string.title_deliver),
-                new Font(TIMES_ROMAN, NORMAL_FONT_SIZE, BOLD)));
+            new Font(TIMES_ROMAN, NORMAL_FONT_SIZE, BOLD)));
         paraDeliver.add(new Chunk(mViewModel.getString(R.string.title_sign_name)));
         PdfPCell deliver = new PdfPCell(paraDeliver);
         deliver.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -286,12 +286,12 @@ public class ExportPresenter implements ExportContract.Presenter {
         paragraph.setFont(FontFactory.getFont(FontFactory.COURIER, sTextSize));
         mParagraph.add(paragraph);
         mParagraph.add(new Paragraph(mViewModel.getString(R.string.title_full_name)
-                + mUser.getFirstName()
-                + " "
-                + mUser.getLastName()));
+            + mUser.getFirstName()
+            + " "
+            + mUser.getLastName()));
         mParagraph.add(new Paragraph(mViewModel.getString(R.string.title_branch)));
         mParagraph.add(new Paragraph(mViewModel.getString(R.string.title_employcode))
-                + mUser.getEmployeeCode());
+            + mUser.getEmployeeCode());
     }
 
     private void getFileName() throws IOException, BadElementException {
@@ -313,13 +313,10 @@ public class ExportPresenter implements ExportContract.Presenter {
         for (Device device : devices) {
             PdfPCell cellName = new PdfPCell(new Phrase(device.getProductionName()));
             table.addCell(cellName);
-
             PdfPCell cellModel = new PdfPCell(new Phrase(device.getModelNumber()));
             table.addCell(cellModel);
-
             PdfPCell cellSeri = new PdfPCell(new Phrase(device.getSerialNumber()));
             table.addCell(cellSeri);
-
             String boughtDate = Utils.getStringDate(device.getBoughtDate());
             PdfPCell cellAssign = new PdfPCell(new Phrase(boughtDate));
             table.addCell(cellAssign);
@@ -333,63 +330,53 @@ public class ExportPresenter implements ExportContract.Presenter {
         return dateFormat.format(cal.getTime());
     }
 
-    private Object createDoc(List<Device> list) {
-        // TODO: 28/06/2017
-        return new NullPointerException(mViewModel.getString(R.string.title_user_not_found));
-    }
-
     @Override
     public void exportDeviceByPdf(List<Device> list) {
         Observable.just(createPdfAssinment(list))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        if (o instanceof String) {
-                            String filePath = (String) o;
-                            mViewModel.onExportPdfSuccess(filePath);
-                        } else {
-                            if (o instanceof NullPointerException) {
-                                mViewModel.showMessage(R.string.message_export_error);
-                            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Action1<Object>() {
+                @Override
+                public void call(Object o) {
+                    if (o instanceof String) {
+                        String filePath = (String) o;
+                        mViewModel.onExportPdfSuccess(filePath);
+                    } else {
+                        if (o instanceof NullPointerException) {
+                            mViewModel.showMessage(R.string.message_export_error);
                         }
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.showMessage(R.string.message_export_error);
-                    }
-                });
+                }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    mViewModel.showMessage(R.string.message_export_error);
+                }
+            });
     }
 
     @Override
     public void exportDeviceByDoc(List<Device> list) {
-        Observable.just(createDoc(list))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-                        if (o instanceof String) {
-                            String filePath = (String) o;
-                            mViewModel.onExportDocSuccess(filePath);
-                        } else {
-                            if (o instanceof NullPointerException) {
-                                mViewModel.showMessage(R.string.message_export_error);
-                            }
-                        }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mViewModel.showMessage(R.string.message_export_error);
-                    }
-                });
+        mExportDocument = new FileExportDocumentImpl(createFolderExport(),
+            createNameFileExport(), list, mUser);
+        mExportDocument.makeDocument();
     }
 
     @Override
     public void onDestroy() {
         mCompositeSubscription.unsubscribe();
+    }
+
+    @Override
+    public File createFolderExport() {
+        File exportDir = new File(Environment.getExternalStorageDirectory(), FOLDER_NAME_FAMS);
+        if (!exportDir.exists()) exportDir.mkdirs();
+        return exportDir;
+    }
+
+    @Override
+    public String createNameFileExport() {
+        if (mUser == null) return null;
+        return mUser.getId() + "_" + mUser.getFirstName() + mUser.getLastName() + getCurentTime();
     }
 }

@@ -175,7 +175,7 @@
     <string name="title_word">Word</string>
     <string name="message_export_success">Export Success File in </string>
     <string name="action_export_file">Export file curent -</string>
-    <string name="title_devices_assignment_report">Devices assignment report</string>
+    <string name="title_devices_assignment_report">BIEN BAN BAN GIAO THIET BI</string>
     <string name="title_full_name">Full Name:</string>
     <string name="title_employcode">Employee code:</string>
     <string name="message_export_error">Export error</string>
@@ -244,4 +244,9 @@
     <string name="action_export_file_doc">Export file document</string>
     <string name="title_warranty">Warranty (Month)</string>
     <string name="error_authentication">Please login again, May be you are offline!!!</string>
+    <string name="title_framgia_company">CONG TY TNHH FRAMGIA VIET NAM</string>
+    <string name="title_iso">ISO/IEC 27001:2015</string>
+    <string name="title_code_string">Ma so: BM-BOD-07-03</string>
+    <string name="title_published_time">Lan ban hanh:1</string>
+    <string name="title_date_publishment">Ngay ban hanh:</string>
 </resources>

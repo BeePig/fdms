@@ -5,6 +5,5 @@ package com.framgia.fdms.screen.export;
  * Interface has more function to export file .doc, .xls..
  */
 public interface FileExportContract {
-    void exportToDocument();
-    void exportToExel();
+    void makeDocument();
 }

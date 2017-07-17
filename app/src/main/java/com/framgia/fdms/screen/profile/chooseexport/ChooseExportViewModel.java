@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import com.android.databinding.library.baseAdapters.BR;
 import com.framgia.fdms.data.model.Device;
 import com.framgia.fdms.data.model.User;
@@ -13,6 +14,7 @@ import com.framgia.fdms.screen.device.listdevice.ListDeviceAdapter;
 import com.framgia.fdms.screen.devicedetail.DeviceDetailActivity;
 import com.framgia.fdms.screen.profile.export.ExportDialogFragment;
 import com.framgia.fdms.utils.navigator.Navigator;
+
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -22,9 +24,8 @@ import static com.framgia.fdms.utils.Constant.TYPE_DIALOG;
 /**
  * Created by tuanbg on 6/15/17.
  */
-
 public class ChooseExportViewModel extends BaseObservable
-        implements ChooseExportContract.ViewModel, ItemDeviceClickListenner {
+    implements ChooseExportContract.ViewModel, ItemDeviceClickListenner {
     private ChooseExportContract.Presenter mPresenter;
     private AppCompatActivity mActivity;
     private ListDeviceAdapter mAdapter;
@@ -91,7 +92,7 @@ public class ChooseExportViewModel extends BaseObservable
     @Override
     public void onDeviceClick(Device device) {
         mNavigator.startActivity(
-                DeviceDetailActivity.getInstance(mNavigator.getContext(),device));
+            DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
     }
 
     public void exportData() {
@@ -128,6 +129,6 @@ public class ChooseExportViewModel extends BaseObservable
     @Override
     public void onItemDeviceClick(Device device) {
         mNavigator.startActivity(
-                DeviceDetailActivity.getInstance(mNavigator.getContext(),device));
+            DeviceDetailActivity.getInstance(mNavigator.getContext(), device));
     }
 }
